@@ -7,23 +7,31 @@ import streamlit as st
 def load_clean_sales2024():
     videogame_sales_2024_df = pd.read_csv("Dataset/vgchartz-2024.csv", sep=',', decimal='.')
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df.drop_duplicates()
+
+    #Clean release date and only keep dates < 2017 as games above 2017 don't have enough data
     videogame_sales_2024_df_cleaned["release_date"] = pd.to_datetime(videogame_sales_2024_df_cleaned["release_date"])
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned[videogame_sales_2024_df_cleaned["release_date"] < pd.to_datetime("2017-01-01")]
-    videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned[["title" ,"console", "genre", "total_sales", "na_sales", "jp_sales", "pal_sales","other_sales","release_date", "critic_score"]]
+
+    #Replace nan values with mean values for sales
     videogame_sales_2024_df_cleaned["na_sales"] = videogame_sales_2024_df_cleaned["na_sales"].fillna(videogame_sales_2024_df_cleaned["na_sales"].mean())
     videogame_sales_2024_df_cleaned["jp_sales"] = videogame_sales_2024_df_cleaned["jp_sales"].fillna(videogame_sales_2024_df_cleaned["jp_sales"].mean())
     videogame_sales_2024_df_cleaned["pal_sales"] = videogame_sales_2024_df_cleaned["pal_sales"].fillna(videogame_sales_2024_df_cleaned["pal_sales"].mean())
     videogame_sales_2024_df_cleaned["other_sales"] = videogame_sales_2024_df_cleaned["other_sales"].fillna(videogame_sales_2024_df_cleaned["other_sales"].mean())
+
+    #Clean genre collumn
+    videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned.dropna(subset=['genre'])
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned[videogame_sales_2024_df_cleaned["genre"] != "Misc"] #Too many Nan data
+
+    #Create year collumn
     videogame_sales_2024_df_cleaned['year'] = videogame_sales_2024_df_cleaned['release_date'].dt.year
     videogame_sales_2024_df_cleaned['year'].dropna()
     return videogame_sales_2024_df_cleaned
 
-def show_sales_per_year(df_sales2024, genreOnGraph, start, end):
+def show_sales_per_year(df_sales2024, popularGenres, start, end):
     fig = plt.figure()
 
     for genre in df_sales2024["genre"].unique():
-        if genre in genreOnGraph:
+        if genre in popularGenres:
             salesPerYear = df_sales2024[df_sales2024["genre"] == genre]
             salesPerYear = salesPerYear[(salesPerYear['year'] >= start) & (salesPerYear['year'] <= end)]
             salesPerYear = salesPerYear.groupby("year")["total_sales"].sum()
@@ -44,7 +52,7 @@ st.title('Video games genres sales by year')
 st.sidebar.title('Sales by year')
 st.sidebar.subheader('Genres')
 
-genreOnGraph = np.array(("Action", "Action-Adventure", "Adventure", "Fighting", "Platform", "Role-Playing", "Shooter", "Sports"))
+popularGenres = np.array(("Action", "Action-Adventure", "Adventure", "Fighting", "Platform", "Role-Playing", "Shooter", "Sports"))
 
 action = st.sidebar.checkbox("Action", True)
 act_adv = st.sidebar.checkbox("Action-Adventure", True)
@@ -68,4 +76,4 @@ if (start == end):
 df_sales2024 = load_clean_sales2024()
 
 st.subheader('Sales per year')
-show_sales_per_year(df_sales2024, genreOnGraph[boolean], start, end)
+show_sales_per_year(df_sales2024, popularGenres[boolean], start, end)
