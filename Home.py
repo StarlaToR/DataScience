@@ -15,7 +15,7 @@ def mean(val):
 
 @st.cache_data
 def load_clean_sales2024():
-    videogame_sales_2024_df = pd.read_csv("vgchartz-2024.csv", sep=',', decimal='.')
+    videogame_sales_2024_df = pd.read_csv("Dataset/vgchartz-2024.csv", sep=',', decimal='.')
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df.drop_duplicates()
     videogame_sales_2024_df_cleaned["release_date"] = pd.to_datetime(videogame_sales_2024_df_cleaned["release_date"])
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned[["title" ,"console", "genre", "total_sales", "na_sales", "jp_sales", "pal_sales","other_sales","release_date", "critic_score"]]
@@ -28,7 +28,7 @@ def load_clean_sales2024():
 
 @st.cache_data
 def load_clean_steamsales_march2025():
-    steam_games_beforemarch2025 = pd.read_csv("games_march2025_full.csv", sep=',', decimal='.')
+    steam_games_beforemarch2025 = pd.read_csv("Dataset/games_march2025_full.csv", sep=',', decimal='.')
     steam_games_beforemarch2025_cleaned = steam_games_beforemarch2025.drop_duplicates()
     steam_games_beforemarch2025_cleaned = steam_games_beforemarch2025_cleaned.dropna(subset=['user_score', 'genres', 'estimated_owners'])
     steam_games_beforemarch2025_cleaned = steam_games_beforemarch2025_cleaned[['user_score', 'genres', 'estimated_owners']]
