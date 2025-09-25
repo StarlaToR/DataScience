@@ -3,13 +3,13 @@
 <h2> Introduction </h2>
 
 This is a Python project made by Matéo Erbisti, Lenny Rabinne, and Antoine Mordant at ISART DIGITAL Paris.
-Its goal is to respond to the question: What are the most popular video game genres in the world?
+Its goal is to respond to the question: What are the most popular and appreciated video game genres in the world?
 
 <h2> Process </h2>
 
 <h3> Data research </h3>
 
-We searched for datasets on video game sales in the last few years, depending on the geographic zone.
+We searched for datasets on video game sales in the last few years, depending on the geographic zone, as well as datasets on video game ratings.
 
 The most accurate ones we found are on Kaggle.
 
@@ -25,7 +25,7 @@ We cleaned our dataset to use proper data for our analysis.
 
 <h3> Analysis </h3>
 
-We studied video game genre sales by region and by year.
+We studied video game genre sales by region and by year, as well as mean ratings per game genre.
 
 <h2> How to use our work </h2>
 
@@ -42,4 +42,4 @@ To run our Streamlit platform, you have to run the command :
 
 <h3> Notebooks </h3>
 
-Our notebooks run under Jupyter. It's where you can find our different graphs.
+Our notebooks run under Jupyter. It's where you can find the different graphs we made to respond to our problematic.
