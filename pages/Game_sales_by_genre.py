@@ -7,13 +7,24 @@ import streamlit as st
 def load_clean_sales2024():
     videogame_sales_2024_df = pd.read_csv("Dataset/vgchartz-2024.csv", sep=',', decimal='.')
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df.drop_duplicates()
+
+    #Clean release date and only keep dates < 2017 as games above 2017 don't have enough data
     videogame_sales_2024_df_cleaned["release_date"] = pd.to_datetime(videogame_sales_2024_df_cleaned["release_date"])
-    videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned[["title" ,"console", "genre", "total_sales", "na_sales", "jp_sales", "pal_sales","other_sales","release_date", "critic_score"]]
+    videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned[videogame_sales_2024_df_cleaned["release_date"] < pd.to_datetime("2017-01-01")]
+
+    #Replace nan values with mean values for sales
     videogame_sales_2024_df_cleaned["na_sales"] = videogame_sales_2024_df_cleaned["na_sales"].fillna(videogame_sales_2024_df_cleaned["na_sales"].mean())
     videogame_sales_2024_df_cleaned["jp_sales"] = videogame_sales_2024_df_cleaned["jp_sales"].fillna(videogame_sales_2024_df_cleaned["jp_sales"].mean())
     videogame_sales_2024_df_cleaned["pal_sales"] = videogame_sales_2024_df_cleaned["pal_sales"].fillna(videogame_sales_2024_df_cleaned["pal_sales"].mean())
     videogame_sales_2024_df_cleaned["other_sales"] = videogame_sales_2024_df_cleaned["other_sales"].fillna(videogame_sales_2024_df_cleaned["other_sales"].mean())
+
+    #Clean genre collumn
+    videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned.dropna(subset=['genre'])
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned[videogame_sales_2024_df_cleaned["genre"] != "Misc"] #Too many Nan data
+
+    #Create year collumn
+    videogame_sales_2024_df_cleaned['year'] = videogame_sales_2024_df_cleaned['release_date'].dt.year
+    videogame_sales_2024_df_cleaned['year'].dropna()
     return videogame_sales_2024_df_cleaned
 
 def show_sales_per_genre(df_sales2024, regions):
