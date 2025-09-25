@@ -5,7 +5,7 @@ import streamlit as st
 
 @st.cache_data
 def load_clean_sales2024():
-    videogame_sales_2024_df = pd.read_csv("vgchartz-2024.csv", sep=',', decimal='.')
+    videogame_sales_2024_df = pd.read_csv("../Dataset/vgchartz-2024.csv", sep=',', decimal='.')
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df.drop_duplicates()
     videogame_sales_2024_df_cleaned["release_date"] = pd.to_datetime(videogame_sales_2024_df_cleaned["release_date"])
     videogame_sales_2024_df_cleaned = videogame_sales_2024_df_cleaned[["title" ,"console", "genre", "total_sales", "na_sales", "jp_sales", "pal_sales","other_sales","release_date", "critic_score"]]
